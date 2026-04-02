@@ -6,3 +6,5 @@
   # Environment variables (optional, for build context)
   [build.environment]
     NODE_VERSION = "18"
+    BING_API_KEY = "your_bing_api_key"
+    OPENAI_API_KEY = "your_openai_api_key"
