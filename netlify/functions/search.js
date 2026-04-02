@@ -27,9 +27,12 @@ exports.handler = async (event, context) => {
       headers: { 'Ocp-Apim-Subscription-Key': process.env.BING_API_KEY }
     });
     const webPages = bingResponse.data.webPages?.value || [];
+    console.log('Bing raw results:', webPages.length);
     for (const page of webPages) {
-      if (page.url.includes('greasyfork.org') || page.url.includes('openuserjs.org')) {
+      console.log('Checking URL:', page.url);
+      if (page.url.includes('greasyfork.org') || page.url.includes('openuserjs.org') || page.url.includes('userscript')) {
         scripts.push({ title: page.name, installUrl: page.url });
+        console.log('Added script:', page.name);
       }
       if (scripts.length >= 10) break;
     }
@@ -51,6 +54,7 @@ exports.handler = async (event, context) => {
     }
   }
   console.log('Scripts found:', scripts.length);
+  console.log('Returning scripts:', scripts);
   return {
     statusCode: 200,
     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },

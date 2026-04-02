@@ -37,6 +37,7 @@ A web-based search engine that locates and provides install links for Tampermonk
 ## Troubleshooting
 - Check logs in Netlify dashboard.
 - Ensure API keys are valid.
+- If no results display, check browser console for logs and ensure API keys return data.
 - Use `/test` endpoint for debugging.
 
 ## License
