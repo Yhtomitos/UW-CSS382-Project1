@@ -1,0 +1,8 @@
+[build]
+  # Directory to publish (static assets)
+  publish = "dist"
+  # Build command to run before publishing
+  command = "npm run build"
+  # Environment variables (optional, for build context)
+  [build.environment]
+    NODE_VERSION = "18"
