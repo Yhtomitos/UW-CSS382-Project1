@@ -2,18 +2,33 @@ const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const path = require('path');
+const OpenAI = require('openai');
 require('dotenv').config();
 
 const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 app.post('/search', async (req, res) => {
-  const query = req.body.query;
+  const userQuery = req.body.query;
+  let smartQuery = userQuery;
+  try {
+    // Generate smart prompt using AI
+    const aiResponse = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: `Generate a smart search query for finding Tampermonkey scripts based on: "${userQuery}". Make it specific and include terms like "tampermonkey userscript".` }],
+      max_tokens: 50
+    });
+    smartQuery = aiResponse.choices[0].message.content.trim();
+  } catch (aiError) {
+    console.log('AI prompt generation failed, using original query');
+  }
   const scripts = [];
   try {
     // First, try Bing Search API
-    const bingUrl = `https://api.bing.microsoft.com/v7.0/search?q=tampermonkey+script+${encodeURIComponent(query)}`;
+    const bingUrl = `https://api.bing.microsoft.com/v7.0/search?q=tampermonkey+script+${encodeURIComponent(smartQuery)}`;
     const bingResponse = await axios.get(bingUrl, {
       headers: { 'Ocp-Apim-Subscription-Key': process.env.BING_API_KEY }
     });
@@ -29,7 +44,7 @@ app.post('/search', async (req, res) => {
     console.log('Bing search failed, falling back to Greasy Fork');
     // Fallback to Greasy Fork API
     try {
-      const url = `https://greasyfork.org/scripts.json?q=${encodeURIComponent(query)}`;
+      const url = `https://greasyfork.org/scripts.json?q=${encodeURIComponent(smartQuery)}`;
       const response = await axios.get(url);
       const data = response.data;
       if (data && data.scripts) {
