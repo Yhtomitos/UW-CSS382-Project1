@@ -4,7 +4,7 @@ document.getElementById('searchForm').addEventListener('submit', async (e) => {
   const resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = 'Searching...';
   try {
-    const response = await fetch('/search', {
+    const response = await fetch('/.netlify/functions/search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query })
