@@ -1,4 +1,5 @@
 const axios = require('axios');
+const cheerio = require('cheerio');
 const OpenAI = require('openai');
 
 exports.handler = async (event, context) => {
@@ -29,10 +30,19 @@ exports.handler = async (event, context) => {
     const webPages = bingResponse.data.webPages?.value || [];
     console.log('Bing raw results:', webPages.length);
     for (const page of webPages) {
-      console.log('Checking URL:', page.url);
       if (page.url.includes('greasyfork.org') || page.url.includes('openuserjs.org') || page.url.includes('userscript')) {
-        scripts.push({ title: page.name, installUrl: page.url });
-        console.log('Added script:', page.name);
+        try {
+          const pageResponse = await axios.get(page.url);
+          const $ = cheerio.load(pageResponse.data);
+          const installLink = $('.install-link').attr('href') || $('a[href*=".user.js"]').attr('href');
+          if (installLink) {
+            const fullInstallUrl = installLink.startsWith('http') ? installLink : `https://greasyfork.org${installLink}`;
+            scripts.push({ title: page.name, installUrl: fullInstallUrl });
+            console.log('Added installable script:', page.name);
+          }
+        } catch (scrapeError) {
+          console.error('Scrape error for', page.url, scrapeError.message);
+        }
       }
       if (scripts.length >= 10) break;
     }

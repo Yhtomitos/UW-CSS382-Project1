@@ -26,6 +26,7 @@ A web-based search engine that locates and provides install links for Tampermonk
 ## Usage
 - Open `public/index.html` in a browser.
 - Enter desired script functionality (e.g., "ad blocker").
+- Click links to install scripts directly in Tampermonkey.
 - View and install scripts from results.
 
 ## Deployment
