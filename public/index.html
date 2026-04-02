@@ -2,15 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tampermonkey Script Search</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #4a4a4a;
+    }
+    form {
+      margin-bottom: 2rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #5a6fd8;
+    }
+    #results {
+      text-align: left;
+    }
+    #results p {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      background: #f9f9f9;
+      border-radius: 5px;
+      border-left: 4px solid #667eea;
+    }
+    #results a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    #results a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <h1>Tampermonkey Script Search Engine</h1>
-  <form id="searchForm">
-    <input type="text" id="query" placeholder="Enter desired functionality (e.g., ad blocker)" required>
-    <button type="submit">Search</button>
-  </form>
-  <div id="results"></div>
+  <div class="container">
+    <h1>Tampermonkey Script Search Engine</h1>
+    <form id="searchForm">
+      <input type="text" id="query" placeholder="Enter desired functionality (e.g., ad blocker)" required>
+      <button type="submit">Search</button>
+    </form>
+    <div id="results"></div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
